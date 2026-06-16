@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>생활 계산기 — 음력 변환·축의금·제삿날</title>
+<meta name="description" content="한국 생활에 필요한 계산기 모음. 음력↔양력 변환(KASI 기준), 축의금·조의금 적정액, 제삿날 계산. 무료, 설치 없이 바로 사용.">
+<style>
+  :root {
+    --bg: #f7f8fa; --card: #fff; --line: #e6e8ec; --ink: #1a1d21;
+    --sub: #6b7280; --accent: #2f6fed;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Pretendard", sans-serif;
+    background: var(--bg); color: var(--ink); line-height: 1.5;
+    -webkit-font-smoothing: antialiased; padding: 16px;
+  }
+  .wrap { max-width: 480px; margin: 0 auto; }
+  header { text-align: center; padding: 32px 0 20px; }
+  header h1 { font-size: 26px; font-weight: 800; }
+  header p { color: var(--sub); font-size: 14px; margin-top: 8px; }
+  a.tile {
+    display: block; background: var(--card); border: 1px solid var(--line); border-radius: 16px;
+    padding: 20px; margin-bottom: 12px; text-decoration: none; color: inherit; transition: .12s;
+  }
+  a.tile:hover { border-color: var(--accent); transform: translateY(-1px); }
+  a.tile.soon { opacity: .55; pointer-events: none; }
+  .tile .emoji { font-size: 26px; }
+  .tile h2 { font-size: 17px; font-weight: 700; margin-top: 8px; }
+  .tile p { font-size: 13px; color: var(--sub); margin-top: 4px; }
+  .badge { display: inline-block; font-size: 11px; color: var(--accent); font-weight: 600; margin-left: 6px; }
+  footer { text-align: center; font-size: 12px; color: var(--sub); padding: 24px 0; }
+  footer a { color: var(--accent); text-decoration: none; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>생활 계산기</h1>
+    <p>한국 생활에 필요한 계산, 설치 없이 바로</p>
+  </header>
+
+  <a class="tile" href="./lunar.html">
+    <div class="emoji">🌙</div>
+    <h2>음력 변환기</h2>
+    <p>양력↔음력 변환 · 한국천문연구원(KASI) 기준 · 윤달 정확</p>
+  </a>
+
+  <a class="tile" href="./gift-money.html">
+    <div class="emoji">💌</div>
+    <h2>축의금·조의금 계산기</h2>
+    <p>관계·친밀도·참석 여부로 적정 금액 추천 · 2025 설문 기준</p>
+  </a>
+
+  <a class="tile soon" href="#">
+    <div class="emoji">🕯️</div>
+    <h2>제삿날 계산기 <span class="badge">준비중</span></h2>
+    <p>음력 기일로 다음 제삿날(양력) 계산</p>
+  </a>
+
+  <footer>
+    음력 엔진: <a href="https://github.com/yoonjason/KoreanLunarKit" target="_blank" rel="noopener">KoreanLunarKit</a> (KASI 기준)
+  </footer>
+</div>
+</body>
+</html>

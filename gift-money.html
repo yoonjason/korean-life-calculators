@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>축의금·조의금 적정액 계산기 — 2025 설문 기준 관계별 추천</title>
+<meta name="description" content="결혼식 축의금, 장례식 조의금 얼마가 적정할까? 2025년 설문 기준으로 관계·친밀도·참석여부에 따른 적정 금액을 추천합니다. 직장 동료 10만원 시대.">
+<style>
+  :root {
+    --bg: #f7f8fa; --card: #fff; --line: #e6e8ec; --ink: #1a1d21;
+    --sub: #6b7280; --accent: #2f6fed; --accent-weak: #eef3fe;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Pretendard", sans-serif;
+    background: var(--bg); color: var(--ink); line-height: 1.5;
+    -webkit-font-smoothing: antialiased; padding: 16px;
+  }
+  .wrap { max-width: 480px; margin: 0 auto; }
+  header { text-align: center; padding: 24px 0 16px; }
+  header h1 { font-size: 22px; font-weight: 700; }
+  header p { color: var(--sub); font-size: 13px; margin-top: 6px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 20px; margin-bottom: 16px; }
+  .toggle { display: flex; background: var(--bg); border-radius: 10px; padding: 4px; margin-bottom: 18px; }
+  .toggle button { flex: 1; border: 0; background: transparent; padding: 9px; border-radius: 7px; font-size: 14px; font-weight: 600; color: var(--sub); cursor: pointer; transition: .15s; }
+  .toggle button.active { background: var(--card); color: var(--accent); box-shadow: 0 1px 3px rgba(0,0,0,.08); }
+  .group { margin-bottom: 16px; }
+  .group > label { display: block; font-size: 13px; font-weight: 600; color: var(--sub); margin-bottom: 8px; }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+  .chips button {
+    border: 1px solid var(--line); background: var(--card); padding: 9px 14px; border-radius: 999px;
+    font-size: 14px; color: var(--ink); cursor: pointer; transition: .12s;
+  }
+  .chips button.on { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .result { margin-top: 4px; padding: 20px; border-radius: 12px; background: var(--accent-weak); display: none; }
+  .result.show { display: block; }
+  .result .small { font-size: 12px; color: var(--accent); font-weight: 600; }
+  .result .big { font-size: 28px; font-weight: 800; margin-top: 4px; }
+  .result .range { font-size: 14px; color: var(--sub); margin-top: 6px; }
+  .result .tip { font-size: 13px; color: var(--ink); margin-top: 12px; padding-top: 12px; border-top: 1px solid rgba(47,111,237,.15); }
+  .affiliate { margin-top: 14px; padding: 14px; border: 1px dashed var(--line); border-radius: 12px; font-size: 12px; color: var(--sub); text-align: center; }
+  .source { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 16px 18px; font-size: 12.5px; color: var(--sub); line-height: 1.7; }
+  .source h2 { font-size: 13px; color: var(--ink); margin-bottom: 8px; }
+  .source a { color: var(--accent); text-decoration: none; }
+  .source ul { margin: 8px 0 0 16px; }
+  footer { text-align: center; font-size: 12px; color: var(--sub); padding: 20px 0; }
+  footer a { color: var(--accent); text-decoration: none; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>축의금·조의금 계산기</h1>
+    <p>2025년 설문 기준 · 관계·친밀도·참석 여부로 추천</p>
+  </header>
+
+  <div class="card">
+    <div class="toggle">
+      <button id="tabWedding" class="active" type="button">💍 결혼식 (축의금)</button>
+      <button id="tabFuneral" type="button">🕯️ 장례식 (조의금)</button>
+    </div>
+
+    <div class="group">
+      <label>상대와의 관계</label>
+      <div class="chips" id="relationChips">
+        <button data-v="coworker" class="on">직장 동료</button>
+        <button data-v="boss">직장 상사·부하</button>
+        <button data-v="friend">친구</button>
+        <button data-v="relative">친척</button>
+        <button data-v="acquaintance">지인·이웃</button>
+      </div>
+    </div>
+
+    <div class="group">
+      <label>얼마나 친한가요?</label>
+      <div class="chips" id="closeChips">
+        <button data-v="0">안 친함</button>
+        <button data-v="1" class="on">보통</button>
+        <button data-v="2">친함</button>
+        <button data-v="3">매우 친함</button>
+      </div>
+    </div>
+
+    <div class="group">
+      <label id="attendLabel">직접 참석하나요?</label>
+      <div class="chips" id="attendChips">
+        <button data-v="yes" class="on">참석 (식사 포함)</button>
+        <button data-v="no">봉투만</button>
+      </div>
+    </div>
+
+    <div class="result" id="result">
+      <div class="small">추천 금액</div>
+      <div class="big" id="rMain"></div>
+      <div class="range" id="rRange"></div>
+      <div class="tip" id="rTip"></div>
+    </div>
+
+    <div class="affiliate" id="affiliate"></div>
+  </div>
+
+  <div class="source">
+    <h2>금액 산출 근거</h2>
+    참석(식사 포함)을 기준으로 한 추천이며, 봉투만 전할 때는 식대를 제외해 조정합니다.
+    <ul>
+      <li><b>축의금:</b> 2025년 <b>인크루트 직장인 844명 설문</b> — 직장 동료 결혼식 축의금 <b>‘10만원’ 61.8%</b>(1위), ‘5만원’ 32.8%. 식사 참석 시 10만원이 보편 기준.</li>
+      <li><b>조의금:</b> 직장 동료 보통 5만원, 친하거나 식사 시 10만원. 홀수(3·5·7만) 또는 10만 단위 관례.</li>
+      <li>호텔·코스 예식 등 식대가 높으면 15만원 이상도 고려.</li>
+    </ul>
+    <div style="margin-top:10px;">
+      출처:
+      <a href="https://zdnet.co.kr/view/?no=20250526084442" target="_blank" rel="noopener">ZDNet(인크루트 설문)</a> ·
+      <a href="https://www.ibrandnews.com/news/articleView.html?idxno=10240" target="_blank" rel="noopener">브랜드뉴스</a> ·
+      <a href="https://thechoomo.co.kr/" target="_blank" rel="noopener">더추모(조의금 가이드)</a>
+      <br>※ 지역·집안·관계에 따라 달라질 수 있는 참고용 추천입니다.
+    </div>
+  </div>
+
+  <footer>
+    <a href="./index.html">← 생활 계산기 홈</a> · <a href="./lunar.html">음력 변환기</a> · 제삿날 계산기(준비중)
+  </footer>
+</div>
+
+<script>
+  const $ = (id) => document.getElementById(id);
+
+  // 만원 단위. "참석(식사 포함)" 기준. [안친함, 보통, 친함, 매우친함]
+  // 축의금은 2025 인크루트 설문(직장동료 10만원 61.8%) 반영해 상향 조정.
+  const TABLE = {
+    wedding: {
+      coworker:     [5, 10, 10, 20],
+      boss:         [5, 10, 10, 15],
+      friend:       [5, 10, 20, 30],
+      relative:     [10, 20, 30, 50],
+      acquaintance: [5, 5, 10, 10],
+    },
+    funeral: {
+      coworker:     [5, 5, 10, 10],
+      boss:         [5, 5, 10, 10],
+      friend:       [5, 10, 10, 20],
+      relative:     [10, 20, 30, 50],
+      acquaintance: [3, 5, 5, 10],
+    },
+  };
+
+  const state = { type: 'wedding', relation: 'coworker', close: 1, attend: 'yes' };
+
+  function pickChip(containerId, value, key, cast) {
+    [...$(containerId).children].forEach((b) => b.classList.toggle('on', b.dataset.v === value));
+    state[key] = cast ? cast(value) : value;
+    render();
+  }
+
+  $('relationChips').addEventListener('click', (e) => {
+    if (e.target.dataset.v) pickChip('relationChips', e.target.dataset.v, 'relation');
+  });
+  $('closeChips').addEventListener('click', (e) => {
+    if (e.target.dataset.v) pickChip('closeChips', e.target.dataset.v, 'close', (v) => parseInt(v, 10));
+  });
+  $('attendChips').addEventListener('click', (e) => {
+    if (e.target.dataset.v) pickChip('attendChips', e.target.dataset.v, 'attend');
+  });
+
+  function setType(type) {
+    state.type = type;
+    $('tabWedding').classList.toggle('active', type === 'wedding');
+    $('tabFuneral').classList.toggle('active', type === 'funeral');
+    $('attendLabel').textContent = type === 'wedding' ? '직접 참석하나요?' : '장례식장에 가나요?';
+    render();
+  }
+  $('tabWedding').addEventListener('click', () => setType('wedding'));
+  $('tabFuneral').addEventListener('click', () => setType('funeral'));
+
+  function render() {
+    const base = TABLE[state.type][state.relation][state.close]; // 참석+식사 기준
+
+    let recommend, low, high, tip;
+    if (state.attend === 'yes') {
+      recommend = base;
+      low = base;
+      high = base + (base >= 20 ? 10 : 5);
+      tip = state.type === 'wedding'
+        ? '식대(1인 약 5~7만원)를 포함한 기준입니다. 호텔·코스 예식이면 15만원 이상도 고려하세요.'
+        : '조문+식사 기준입니다. 홀수(3·5·7만) 또는 10만원 단위가 관례입니다.';
+    }
+    else {
+      // 봉투만 — 식대 제외해 하향 (10만 이하는 5만, 초과는 -5만)
+      recommend = base <= 10 ? 5 : base - 5;
+      low = recommend;
+      high = recommend + 5;
+      tip = state.type === 'wedding'
+        ? '참석하지 않고 마음만 전할 때의 일반적 금액입니다.'
+        : '조문만 할 때의 기준입니다. 마음을 전하는 데 의미가 있습니다.';
+    }
+
+    $('result').classList.add('show');
+    $('rMain').textContent = `${recommend}만원`;
+    $('rRange').textContent = `일반 범위: ${low}만 ~ ${high}만원`;
+    $('rTip').textContent = tip;
+
+    // 제휴 위젯 자리 — 트래픽 검증 후 화환·답례품 제휴 연결
+    $('affiliate').textContent = state.type === 'funeral'
+      ? '[제휴 위젯 자리] 근조화환·답례품 — 트래픽 검증 후 연결'
+      : '[제휴 위젯 자리] 축하화환·답례품 — 트래픽 검증 후 연결';
+  }
+
+  render();
+</script>
+</body>
+</html>
