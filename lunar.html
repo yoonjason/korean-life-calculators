@@ -144,10 +144,11 @@
         if (!cal.setSolarDate(y, m, d)) throw new Error('변환할 수 없는 날짜입니다');
         const l = cal.getLunarCalendar();
         const leapText = l.intercalation ? ' (윤달)' : '';
+        const gapja = cal.getKoreanGapja ? cal.getKoreanGapja() : null;
         showResult({
           label: '음력',
           main: `${l.year}년 ${l.month}월 ${l.day}일${leapText}`,
-          extra: cal.getKoreanGapja ? cal.getKoreanGapja() : '',
+          extra: gapja ? `${gapja.year} ${gapja.month} ${gapja.day}` : '',
         });
       }
       else {
