@@ -166,6 +166,13 @@
       showResult({ label: '변환 실패', main: e.message, isError: true });
     }
   });
+
+  // 기본값: 오늘 날짜(양력) 자동 입력 후 즉시 변환
+  const today = new Date();
+  $('y').value = today.getFullYear();
+  $('m').value = today.getMonth() + 1;
+  $('d').value = today.getDate();
+  $('convert').click();
 </script>
 </body>
 </html>
